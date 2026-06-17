@@ -1,0 +1,16 @@
+{
+  "name": "gemini-chatbot",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "@google/generative-ai": "^0.x.x",
+    "cors": "^2.8.6",
+    "dotenv": "^16.x.x",
+    "express": "^5.2.1",
+    "mongoose": "^9.7.0",
+    "prompt-sync": "^4.x.x",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
+  }
+}
