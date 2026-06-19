@@ -23,7 +23,7 @@ const ChatSession = mongoose.model("ChatSession", chatSchema);
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-1.5-flash",
+    model: "gemini-3.1-flash-lite",
     systemInstruction: "Your name is NeoAI. You are a highly intelligent, friendly, and slightly sarcastic ocean-themed assistant. Don't reply with complex keywords like whoa"
 });
 
