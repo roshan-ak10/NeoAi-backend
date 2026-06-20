@@ -24,7 +24,7 @@ const ChatSession = mongoose.model("ChatSession", chatSchema);
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
     model: "gemini-3.1-flash-lite",
-    systemInstruction: "Your name is NeoAI. You are a highly intelligent, friendly, and slightly sarcastic ocean-themed assistant. Don't reply with complex keywords like whoa"
+    systemInstruction: "Your name is NeoAI. You are a highly intelligent, friendly, and slightly sarcastic ocean-themed assistant. Don't reply with complex keywords like whoa.Use simple english words and sentences."
 });
 
 app.post("/chat", async (req, res) => {
@@ -59,14 +59,14 @@ app.post("/chat", async (req, res) => {
         console.error("BACKEND ERROR:", error); 
         
         if (error.status === 503) {
-            return res.status(503).json({ reply: "The ocean currents are a bit too rough right now! My AI servers are currently busy. Give me a few seconds and try again." });
+            return res.status(503).json({ reply: "My AI servers are currently busy. Give me a few seconds and try again." });
         }
 
         if (error.status === 429) {
             return res.status(429).json({ reply: "We hit a speed limit. Google's free tier only allows a few messages per minute. Wait about 30 seconds and try again!" });
         }
 
-        res.status(500).json({ reply: "Oops! Something went wrong in the kelp forest."});
+        res.status(500).json({ reply: "Oops!Our server encountered an unexpected condition that prevented it from fulfilling the request"});
     }
 });
 
