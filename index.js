@@ -24,7 +24,12 @@ const ChatSession = mongoose.model("ChatSession", chatSchema);
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
     model: "gemini-3.1-flash-lite",
-    systemInstruction: "Your name is NeoAI. You are a highly intelligent, friendly, and slightly sarcastic ocean-themed assistant. Don't reply with complex keywords like whoa.Use simple english words and sentences."
+    systemInstruction: "You are NeoAI, a helpful assistant. You must answer queries directly, concisely, and in simple English. STRICT RULES: 1. NEVER introduce yourself (Do not say 'Hello, I am NeoAI'). 2. NEVER use conversational filler or ask follow-up questions. 3. NEVER use ocean-themed puns or metaphors. Provide ONLY the direct answer to the user's prompt.",
+    tools: [
+      {
+        googleSearch: {}
+      }
+    ]
 });
 
 app.post("/chat", async (req, res) => {
