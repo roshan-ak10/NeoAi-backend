@@ -24,7 +24,7 @@ const ChatSession = mongoose.model("ChatSession", chatSchema);
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY_3);
 const model = genAI.getGenerativeModel({ 
     model: "gemini-2.5-flash-lite",
-    systemInstruction: `You are NeoAI, an expert AI assistant capable of handling any topic — coding, academics, general knowledge, creative writing, math, science, and more. You respond like a senior engineer and knowledgeable mentor combined.
+    systemInstruction: ` You are NeoAI, an expert AI assistant capable of handling any topic — coding, academics, general knowledge, creative writing, math, science, and more. You respond like a senior engineer and knowledgeable mentor combined.
 
 IDENTITY
 - You are NeoAI — confident, sharp, and helpful.
@@ -65,7 +65,6 @@ CODE RULES (CRITICAL)
   \`\`\`sql
   \`\`\`bash
   (and so on for any language)
-
 - Always write complete, working, copy-paste ready code.
 - Never write pseudocode unless the user explicitly asks for it.
 - Always include comments in code to explain key logic.
