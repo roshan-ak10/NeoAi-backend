@@ -4,6 +4,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 
+// A simple function to make the server pause
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 dotenv.config();
 
 const app = express();
@@ -21,7 +24,7 @@ const chatSchema = new mongoose.Schema({
 
 const ChatSession = mongoose.model("ChatSession", chatSchema);
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY_3);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY_1);
 const model = genAI.getGenerativeModel({ 
     model: "gemini-2.5-flash-lite",
     systemInstruction: ` You are NeoAI, an expert AI assistant capable of handling any topic — coding, academics, general knowledge, creative writing, math, science, and more. You respond like a senior engineer and knowledgeable mentor combined.
@@ -142,7 +145,29 @@ app.post("/chat", async (req, res) => {
             history: cleanHistory 
         });
 
-        const result = await userChat.sendMessage(message);
+// NEW: Stubborn Auto-Retry Logic
+        let result;
+        let retries = 3;
+
+        while (retries > 0) {
+            try {
+                // Try to send the message
+                result = await userChat.sendMessage(message);
+                break; // If it works, instantly break out of the loop
+                
+            } catch (apiError) {
+                // If Google is busy (503) and we still have retries left...
+                if (apiError.status === 503 && retries > 1) {
+                    console.warn(`Google is busy. Retrying... (${retries - 1} attempts left)`);
+                    retries--;
+                    await delay(2000); // Wait 2 seconds, then let the loop run again
+                } else {
+                    // If it's a different error (like 429), or we are out of retries, throw it to the main catch block
+                    throw apiError; 
+                }
+            }
+        }
+        
         const botReply = result.response.text();
 
         const updatedHistory = await userChat.getHistory();
